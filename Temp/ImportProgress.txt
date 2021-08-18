@@ -1,0 +1,5 @@
+4 Inputs
+1 Outputs
+4 States
+10 Transitions
+Import Was Successful
