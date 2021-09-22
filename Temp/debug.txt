@@ -1,0 +1,2 @@
+robocopy "C:\\autotest\\ModelTester\CurrentTest\Behavioral Model" "C:\\Users\\evansundry\\Documents\\Project Folders\\CRPS\\MBT\\Regresion\\Dell\report\data\Behavioral Model"
+Behavioral Done
