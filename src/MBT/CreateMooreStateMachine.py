@@ -10,22 +10,22 @@ class CreateMooreStateMachine:
         self.UserFSM 		= UserFSM
         self.states 		= UserFSM.states
         self.transitions 	= UserFSM.transitions
-	
+
     # def reset(self):
      # self.currentState=0
 # ======================================
 # Error Reporting
 # ======================================
-    def ReportError(self,newline=''): 
+    def ReportError(self,newline=''):
      if newline=='':
       file = open('Temp\\ExploreProgress.txt','w')
      else:
       file = open('Temp\\ExploreProgress.txt','a')
       file.write(newline+'\n')
      file.close()
-	  
-    def printToFile(self,outputsToUse=[],ExtraOutputs=[]):
-     outfile	=open("ModelFSMTest.py",'w')
+
+    def printToFile(self,path,outputsToUse=[],ExtraOutputs=[]):
+     outfile	=open(os.path.join(path,"ModelFSMTest.py"),'w')
      outfile.write('# Actions\n')
      for action in self.UserFSM.actions:
       outfile.write('def '+action+'(): pass\n')
@@ -34,7 +34,7 @@ class CreateMooreStateMachine:
      else:
       outfile.write('Outputs = '+str(self.UserFSM.outputs))
      outfile.write('\n# States\n')
-     outfile.write('states = {\n') 
+     outfile.write('states = {\n')
      for state in self.states:
       outfile.write(' '+str(state)+' : '+str(self.states[state])+',\n')
      outfile.write('}\n\n')
@@ -50,7 +50,7 @@ class CreateMooreStateMachine:
       outfile.write('"'+str(event)+'",\n')
      outfile.write(")")
      outfile.close()
-	 
+
     def WriteStateOutputTable(self):
      outfile	=open("CurrentTest\\ModelFSMTest State Output Table.csv",'w')
      stateName = self.states[0]['name']
@@ -59,7 +59,7 @@ class CreateMooreStateMachine:
       stateName = self.states[state]['name']
       outfile.write(','.join([str(stateName)]+[str(self.states[state]['outputs'][x]).replace(',','-') for x in list(self.states[state]['outputs'])])+'\n')
      outfile.close()
-	  
+
     def Explore(self,actionsToUse=[],outputsToUse=[],ExtraOutputs=[]):
      print(actionsToUse)
      mp = copy.deepcopy(self.UserFSM)
@@ -86,7 +86,7 @@ class CreateMooreStateMachine:
      self.ReportError('%s States' % len(states))
      self.ReportError('%s Transitions' % len(graph))
      self.ReportError('Exploration Successful')
-	 
+
     def InputActionsValues(self,mp):
       actionVals = dict()
       # print(mp.actionValues)
@@ -101,22 +101,22 @@ class CreateMooreStateMachine:
       # print(actionVals)
       return actionVals
 
-	 
+
     def ExploreActionsInState(self,UserFSM,graph,states,acts,outs,istate,FSMstate,actionsToUse,outputsToUse,ExtraOutputs,EventTracker):
      mp = copy.deepcopy(UserFSM)
      mp.recall(*FSMstate)
      startState = int(istate)
-     allActions = list(mp.Allactions) 
+     allActions = list(mp.Allactions)
     #  print(allActions)
      newAction=[]
-# If actions are limited this will set it. 
+# If actions are limited this will set it.
      if actionsToUse!=[]:
       for i,(action,args,delay) in enumerate(allActions):
       #  print(action,args)
        if action in actionsToUse:
         newAction.append((action,args,delay))
       allActions=newAction
-	  
+
      for (action,args,delay) in allActions:
       arg = (sum(args)/2,) if len(args)==2 and type(args[1]) is not str else args
       stateBefore	     	= str(mp.currentState)

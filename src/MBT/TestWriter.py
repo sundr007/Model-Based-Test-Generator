@@ -40,13 +40,13 @@ def VariationsAlongPath(actions,actionvalues):
   allactionvalues	= [[x] for x in mainactionvalues]
  # print('%s\n%s\n'%(allactions,allactionvalues))
  return (allactions,allactionvalues)
- 
+
 def xfrange(start, stop, step):
  step = max(step,0.1)
  while start < stop:
   yield start
   start += step
- 
+
 def decodeActionVals(actionvalue):
  if '-' in actionvalue and ':' not in actionvalue:
   values = actionvalue.split('-')[1].replace('[','').replace(']','').split(';')
@@ -66,23 +66,23 @@ def decodeActionVals(actionvalue):
  else:
   return actionvalue
   # seqActionVals.append(actionvalue)
-  
+
 def TransitionDelay(transition):
  # return transition[3]
  return transition[2]
- 
+
 def transitionActions(transition):
  actions=[]
  for actAndVal in transition[1]:
   actions.append(actAndVal[0])
  return actions
- 
+
 def transitionActionVals(transition):
  actionValues=[]
  for actAndVal in transition[1]:
   actionValues.append(actAndVal[1])
  return actionValues
-  
+
 def SequenceActions(transitions,tseq,trans):
  seqActions=[]
  for i in tseq:
@@ -121,7 +121,7 @@ class TestWriter:
     def TestType(i,test):
      return test[6][0]
 # class variable shared by all instances
-    kind = 'Create and Run Specified Tests'         
+    kind = 'Create and Run Specified Tests'
 # instance variable unique to each instance
     def __init__(self, FSM, testFilePath, TestFSM):
         self.FSM 					= FSM
@@ -129,7 +129,7 @@ class TestWriter:
         self.testFilePath			= testFilePath
         self.currentTestFilePath   	= testFilePath
         self.tests					= LoadTestsfromTestFile(self.testFilePath)
-			
+
     def createRegressionTest(self,ChangesOnly=0,TestLength=10,UseScope=0):
      self.CreateDataAndReportFolders()
      testedTransitions = []
@@ -150,14 +150,14 @@ class TestWriter:
      else:
       startState = 0
       solution = []
-      for i,edge in enumerate(self.TestFSM.transitions): 
+      for i,edge in enumerate(self.TestFSM.transitions):
        (initactions,initactionvalues,TransitionList) 	= self.TestFSM.State2State(startState,edge[0],1)
        solution = solution + TransitionList + [i]
        startState = edge[3]
       transitions = list(solution)
       for x in transitions:
        print (x)
-	  
+
 # Break the large test procedure into individual tests of length "TestLength"
      while(len(testedTransitions) < len(self.TestFSM.transitions)):
       # Get to start state
@@ -172,7 +172,7 @@ class TestWriter:
         transitions.pop(0)
        else:
         break
-      # Get back to state 0  
+      # Get back to state 0
       if len(transitions) > 0:
         startState										= self.TestFSM.transitions[transitions[0]][0]
         if startState ==0:
@@ -201,7 +201,7 @@ class TestWriter:
        arg = (sum(vals)/2,) if len(vals)==2 and type(vals[1]) is not str else vals
        inputsbefore = 0 if type(vals[0]) is not str and vals[0] > 0 else 1
        tseq.append(trans)
-       
+
        if UseScope:
          scopeShotAction = 'ScopeShot'
          if inputsbefore > 0:
@@ -250,7 +250,7 @@ class TestWriter:
       self.InitProcedure(test) # see if this step can be eliminated???????
       StateResults = self.FinishProcedure(actions,actionvalues,measurements,setups,Procedure,testType,TestTransistions,ChangesOnly,pushbutton)
 # Copy the model used to the test.  Used for generating diagrams and as a copy of what was used.
-      shutil.copy2('ModelFSMTest.py', self.currentTestFilePath+'\\ModelFSMCopy.py')
+      shutil.copy2('ModelFSMTest.py', os.path.join(self.currentTestFilePath,'ModelFSMCopy.py'))
 
     def createTests(self):
      self.CreateDataAndReportFolders()
@@ -263,7 +263,7 @@ class TestWriter:
 # Measure all outputs
        test[5] = self.TestFSM.outputs
       self.createSingleTest(test)
-	
+
     def createSingleTest(self,test,i=0):
 # Test Procedure for PC to perform
      self.InitProcedure(test)
@@ -278,14 +278,14 @@ class TestWriter:
 # Test Spec
      self.CreateTestSpec(StateResults)
      if testType == 'step':
-      shutil.copy2('ModelFSMTest.py', self.currentTestFilePath+'\\ModelFSMCopy.py')
+      shutil.copy2('ModelFSMTest.py', os.path.join(self.currentTestFilePath,'ModelFSMCopy.py'))
       # test[2] = list([x.split('-')[0] for x in test[2]])
       # self.TestFSM.printToFile(0,self.Transitions(test))
       # sleep(0.2)
       # self.TestFSM.CreateFSMGraph(['00Test%sgraph' % i,"%s" % self.currentTestFilePath])
       # sleep(0.2)
-	  
-    def CreateTestSpec(self,StateResults): 
+
+    def CreateTestSpec(self,StateResults):
      specList = []
      # print(StateResults)
      for StateResult in StateResults:
@@ -316,10 +316,10 @@ class TestWriter:
       SpecFile.write(r"\end{adjustwidth}"+ "\n")
       SpecFile.write(r"\noindent"+ "\n")
       SpecFile.close()
-	 
+
     def FinishProcedure(self,actions,actionvalues,measurements,setups,Procedure,testType,TestTransistions,ChangesOnly=0,pushbuttonList=list()):
      TestName = 'testingFile' #self.tests[TestNumber][1][0]
-     TestFile = open("%s%s.py" % (self.currentTestFilePath,TestName), 'a')
+     TestFile = open(os.path.join(self.currentTestFilePath,TestName+'.py'), 'a')
      listofactions = list()
      listofdelays 	= list()
      listofsetups	= list()
@@ -343,7 +343,7 @@ class TestWriter:
       # listofstates.append(self.FSM.CurrentState())
       listofactions.append('%s[%s]' % (aname, args[0]))
       listofdelays.append('%s' % (delay))
-      StateResults = dict(self.FSM.Currentoutputs()) 
+      StateResults = dict(self.FSM.Currentoutputs())
       # AddMeasurementItemsToStateResults(measurements[i],StateResults)
       measuremens = [x.split('*')[0] for x in measurements[i]]
       for key in list(StateResults):
@@ -365,7 +365,7 @@ class TestWriter:
         StateResultss=dict(StateResults)
        listofMooreResultsFromModel.append(StateResultss)
        OldStateResults = dict(StateResults)
-       
+
        #Sort the test measures by key
        import operator
        StateResultss = sorted(StateResultss.items(), key=operator.itemgetter(0))
@@ -410,7 +410,7 @@ class TestWriter:
        TestFile.write("    '%s',\n" % oldTestType)
      TestFile.write("    '%s',\n" % testType)
      TestFile.write(']\n\n')
-	 
+
 # Transition List
      TestFile.write('TestTransistions = [\n')
 # Put previous test procedures in first.
@@ -419,10 +419,10 @@ class TestWriter:
        TestFile.write("    %s,\n" % oldTestTransistion)
      TestFile.write("    %s,\n" % TestTransistions)
      TestFile.write(']\n')
-	 
+
      TestFile.close()
      return listofMooreResultsFromModel
-	 
+
     def GetProcedureSteps(self,test,simple=0):
      measure			= self.outputs(test) # self.tests[TestNumber][4]
      sets				= self.Inputs(test) #self.tests[TestNumber][3]
@@ -471,7 +471,7 @@ class TestWriter:
       print('%s\n%s\n%s\n'%(scopeActions,scopeActionVals,MList) )
       (seqActions,midSeqActionVals) 		= SequenceActions(self.TestFSM.transitions,tseq,trans)
       print(MList)
-      scopeShotName 	= [[('-'.join(MList[0]),sets,inputsbefore),]] if isinstance(MList[0][0], str) else [[('%s-%s'%(MList[0][0][0],MList[0][1]),sets,inputsbefore),]] 
+      scopeShotName 	= [[('-'.join(MList[0]),sets,inputsbefore),]] if isinstance(MList[0][0], str) else [[('%s-%s'%(MList[0][0][0],MList[0][1]),sets,inputsbefore),]]
       scopeShotActions	= [['ScopeShot',]]
       seqActionVals		= []
       print(seqActions)
@@ -517,12 +517,12 @@ class TestWriter:
       setups.extend([[]]*(len(finalresetactions[0])))
       TestTransistions = list([int(x.split('-')[0]) for x in test[2]])
      return (actions,actionvalues,measurements,setups,[initactions[0],seqActions[0],resetactions[0],finalresetactions[0]],testType,TestTransistions)
-	 
+
     def InitProcedure(self,test):
      TestName = 'testingFile'
      oldActions = []
-     if os.path.isfile("%s%s.py" % (self.currentTestFilePath,TestName)): 
-      oldtestFile = open("%s%s.py" % (self.currentTestFilePath,TestName))
+     if os.path.isfile(os.path.join(self.currentTestFilePath,TestName+'.py')):
+      oldtestFile = open(os.path.join(self.currentTestFilePath,TestName+'.py'))
       for line in oldtestFile:
        if 'def' in line and 'pass' in line:
         oldActions.append(re.search('\b(\w*?)(?=\()',line))
@@ -536,14 +536,14 @@ class TestWriter:
       self.oldTestTypes			= oldtestFile.TestType
       self.oldTestTransistions	= oldtestFile.TestTransistions
       sys.path.remove(self.currentTestFilePath)
-      del sys.modules[TestName] 
+      del sys.modules[TestName]
      else:
       self.oldtestSuites		= []
       self.oldreports			= []
       self.oldprocedures		= []
       self.oldTestTypes			= []
       self.oldTestTransistions	= []
-     TestFile = open("%s%s.py" % (self.currentTestFilePath,TestName), 'w')
+     TestFile = open(os.path.join(self.currentTestFilePath,TestName+'.py'), 'w')
      TestFile.write('\n# %s' % TestName)
      TestFile.write(' %s\n' % ' '.join(['%s' % state for state in self.TestFSM.states]))
      TestFile.write('\n# actions here are just labels, but must be symbols with __name__ attribute\n\n')
@@ -564,13 +564,13 @@ class TestWriter:
      TestFile.write('\ntestSuite = [\n')
      TestFile.write('  [\n')
      TestFile.close()
-	 
+
     def CreateDataAndReportFolders(self):
-     if not os.path.exists(self.testFilePath+"report\\"):
-      os.makedirs(self.testFilePath+"report\\")
-     if not os.path.exists(self.testFilePath+"report\\data"):
-      os.makedirs(self.testFilePath+"report\\data")
-      
+     if not os.path.exists(os.path.join(self.testFilePath,"report")):
+      os.makedirs(os.path.join(self.testFilePath,"report"))
+     if not os.path.exists(os.path.join(self.testFilePath,"report","data")):
+      os.makedirs(os.path.join(self.testFilePath,"report","data"))
+
     def FindActionLimits(self):
      actionLimits = dict()
      for tran in self.TestFSM.transitions:
@@ -592,7 +592,7 @@ class TestWriter:
         else:
           min1 = min(tran[1][0][1])
           max1 = max(tran[1][0][1])
-        # max cannot handle a string so remove it          
+        # max cannot handle a string so remove it
         if len(actionLimits[key])==2 and type(actionLimits[key][1]) is str:
           del actionLimits[key][1]
           maxR = actionLimits[key][0]
@@ -615,23 +615,23 @@ class TestWriter:
       else:
         actionLimits[key]=list(tran[1][0][1])
      return actionLimits
-	  
+
     def CreateTestFolders(self,name):
-     self.currentTestFilePath = self.testFilePath+"report\\data\\" + name + "\\"
+     self.currentTestFilePath = os.path.join(self.testFilePath,"report","data", name)
      if not os.path.exists(self.currentTestFilePath):
       os.makedirs(self.currentTestFilePath)
-     if not os.path.exists(self.currentTestFilePath+"\\skip\\"):
-      os.makedirs(self.currentTestFilePath+"\\skip\\")
-     if not os.path.exists(self.currentTestFilePath+"\\plots\\"):
-      os.makedirs(self.currentTestFilePath+"\\plots\\")
-	  
+     if not os.path.exists(os.path.join(self.currentTestFilePath,"skip")):
+      os.makedirs(os.path.join(self.currentTestFilePath,"skip"))
+     if not os.path.exists(os.path.join(self.currentTestFilePath,"plots")):
+      os.makedirs(os.path.join(self.currentTestFilePath,"plots"))
+
     def DeleteOldTestingFile(self):
      TestName = 'testingFile'
      if os.path.isfile("%s%s.py" % (self.currentTestFilePath,TestName)):
       os.remove("%s%s.py" % (self.currentTestFilePath,TestName))
 
 
-	  
+
 def ScopeIn(measure):
  return sum([(1 if 'scope' in m.lower() else 0) for m in measure])>0
 
@@ -642,11 +642,11 @@ def ScopeSetupParameters(transitions,tseq,measure,sets,self):
  SignalLevel	= []
 
  TransitionTime	= round(sum([TransitionDelay(transitions[i])  for i in tseq])/8,5)
- 
+
  # Trigger
  triggerCHN		= transitionActions(transitions[tseq[0]])[0]
  triggerPOL		= 1 if transitionActionVals(transitions[tseq[0]])[0][0] else 0
- 
+
  StartState = self.TestFSM.states[transitions[tseq[0]][0]]
  NextState = self.TestFSM.states[transitions[tseq[0]][3]]
  useTrig=0
@@ -690,7 +690,7 @@ def ScopeSetupParameters(transitions,tseq,measure,sets,self):
     else:
      POL1 = 0 if self.TestFSM.stateValues[StartState][signalName[0]] > self.TestFSM.stateValues[NextState][signalName[0]] else 1
     POL2 = 0 if self.TestFSM.stateValues[StartState][signalName[1]] > self.TestFSM.stateValues[NextState][signalName[1]] else 1
-    
+
     signalName.append(POL1)
     signalName.append(POL2)
    MList.append([signalName,Item])
@@ -707,11 +707,11 @@ def ScopeSetupParameters(transitions,tseq,measure,sets,self):
  scopeAction 		= 'SetupScope'
  scopeActionVals 	= {'TransitionTime':TransitionTime,'SignalList':SignalList,'SignalLevel':SignalLevel,'triggerInfo':triggerInfo}
  return (scopeAction,triggerCHN,scopeActionVals,MList)
- 
+
 def SpecOf(Signal,self,specs=[]):
  state={}
  Value=[]
- 
+
  for state in self.TestFSM.states:
   for output in self.TestFSM.stateValues[state]:
    if output==Signal:
@@ -720,12 +720,12 @@ def SpecOf(Signal,self,specs=[]):
     # print(self.FSM.stateValues[state][output])
     # print(Value)
     Value.append(self.TestFSM.stateValues[state][output])
-    
+
  # if did not find spec in outputs look in action inputs
  if Value==[]:
    if Signal in self.actionLimits:
      Value.append(self.actionLimits[Signal])
-     
+
  if Value==[]:
   if '*' in specs:
    specs = ast.literal_eval(specs.split('*')[1].replace(';',','))
@@ -749,10 +749,10 @@ def SpecOf(Signal,self,specs=[]):
   else:
     maxValue = max(max1)
   return maxValue
- 
+
 def quote(input):
  return "'%s'" % (input)
- 
+
 def LoadTestsfromTestFile(testFilePath):
  testsToCreate=list()
  if os.path.exists(testFilePath+"\\Tests.csv"):
@@ -767,7 +767,7 @@ def LoadTestsfromTestFile(testFilePath):
  else:
   testsToCreate = 0
  return testsToCreate
- 
+
 def AddMeasurementItemsToStateResults(measurements,StateResults):
  for measurement in measurements:
   if '*' in measurement:

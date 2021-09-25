@@ -1,6 +1,6 @@
 # Actions
-Actions = ['A', 'B', 'C', 'Imain', 'Imain', 'PSKILL', 'page', 'MaskUVWbitPage00', 'MaskUVWbitPage01', 'MaskUVPbitPage00', 'MaskUVPbitPage01', 'MaskOffLowInputbitPage00', 'MaskOffLowInputbitPage01', 'MaskVoutOVbitPage00', 'MaskVoutOVbitPage01', 'MaskVoutUVbitPage00', 'MaskVoutUVbitPage01', 'MaskOTPbitPage00', 'MaskOTPbitPage01', 'MaskFanFaultbitPage00', 'MaskFanFaultbitPage01', 'clearFaults', 'ClearUVWbitPagePlus00', 'ClearUVWbitPagePlus01', 'ClearUVWbit', 'ClearUVPbitPagePlus00', 'ClearUVPbitPagePlus01', 'ClearUVPbit', 'ClearOFFLOWINPUTbitPagePlus00', 'ClearOFFLOWINPUTbitPagePlus01', 'ClearOFFLOWINPUTbit', 'ClearVoutOVbitPagePlus00', 'ClearVoutOVbitPagePlus01', 'ClearVoutOVbit', 'ClearVoutUVbitPagePlus00', 'ClearVoutUVbitPagePlus01', 'ClearVoutUVbit', 'ClearOTPbitPagePlus00', 'ClearOTPbitPagePlus01', 'ClearOTPbit', 'ClearFanFaultbitPagePlus00', 'ClearFanFaultbitPagePlus01', 'ClearFanFaultbit']
-Outputs = ['OUT']
+Actions = ['A', 'B', 'C', 'Imain', 'PSKILL']
+Outputs = ['OUT', 'notOUT']
 # Default Values
 DefaultActions = {'A': 0, 'B': 1, 'C': 1, 'Imain': 10}
 DefaultOutputs = {'OUT': 0}

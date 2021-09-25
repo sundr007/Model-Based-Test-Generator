@@ -18,11 +18,11 @@ class SystemModel:
     def __init__(self,fPath,Name,UseIOfile,DefaultValues,SpecFilePath=''):
 # Load Modules
         #loads the ModelFSM file from the model directory
-        ioSpec = IMPORTER.spec_from_file_location(Name, fPath+Name) #(module name, path)
+        ioSpec = IMPORTER.spec_from_file_location(Name, os.path.join(fPath,Name)) #(module name, path)
         ModelFSM = IMPORTER.module_from_spec(ioSpec)
         ioSpec.loader.exec_module(ModelFSM)
         #loads the inputOutput file from the model directory
-        ioSpec = IMPORTER.spec_from_file_location("InputOuputs.py", fPath+'InputOutputs.py') #(module name, path)
+        ioSpec = IMPORTER.spec_from_file_location("InputOuputs.py", os.path.join(fPath,'InputOutputs.py')) #(module name, path)
         inOutFile = IMPORTER.module_from_spec(ioSpec)
         ioSpec.loader.exec_module(inOutFile)
 # Specs

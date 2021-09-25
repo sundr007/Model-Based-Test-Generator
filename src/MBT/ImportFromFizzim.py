@@ -8,9 +8,9 @@ import importlib.util as IMPORTER
 # DependantOutputsPath = str(sys.argv[2])
 # inputfile = str(sys.argv[3])
 
-def importFizzim(SpecFilePath,DependantOutputsPath,inputfile):
+def importFizzim(SpecFilePath,DependantOutputsPath,inputfile,outPath):
     # inputfile = 'ModelFSM.v'
-    outputfile = 'ModelFSM.py'
+    outputfile = os.path.join(outPath,'ModelFSM.py')
 
     statevariables	=list()
     Inputs			=list()
@@ -48,15 +48,19 @@ def importFizzim(SpecFilePath,DependantOutputsPath,inputfile):
     # Report Progress to Labview
     # ======================================
     def WriteToLabview(newline=''):
-     if not os.path.isdir('Temp'):
-       os.mkdir('Temp')
-     if newline=='':
-      file = open(os.path.join('Temp','ImportProgress.txt'),'w')
-      # file.write('Start of Testing:\n')
+     labviewPresnt =False
+     if labviewPresnt:
+         if not os.path.isdir('Temp'):
+           os.mkdir('Temp')
+         if newline=='':
+          file = open(os.path.join('Temp','ImportProgress.txt'),'w')
+          # file.write('Start of Testing:\n')
+         else:
+          file = open(os.path.join('Temp','ImportProgress.txt'),'a')
+          file.write(newline+'\n')
+         file.close()
      else:
-      file = open(os.path.join('Temp','ImportProgress.txt'),'a')
-      file.write(newline+'\n')
-     file.close()
+         print(newline)
     # ======================================
 
     # ======================================
@@ -96,7 +100,7 @@ def importFizzim(SpecFilePath,DependantOutputsPath,inputfile):
      SpecFile	=open(SpecFilePath,'r')
      for line in SpecFile:
       outputsInFile.append(line.split(',')[0])
-     print("Read in spec file ",SpecFilePath)
+     # print("Read in spec file ",SpecFilePath)
 
      SpecFile	=open(SpecFilePath,'r')
      Specs={}
