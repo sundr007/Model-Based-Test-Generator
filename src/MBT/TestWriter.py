@@ -4,7 +4,7 @@ from csv import reader
 from numpy import cumsum
 from numpy.random import rand
 import networkx as nx
-from ChinesePostMan import CPP
+from MBT.ChinesePostMan import CPP
 
 def VariationsAlongPath(actions,actionvalues):
  allactions			= list()

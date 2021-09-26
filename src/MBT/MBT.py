@@ -1,12 +1,12 @@
-import os,shutil
+import os,shutil,pkg_resources
 from collections import OrderedDict
 
 import importlib.util as IMPORTER
 
-from ImportFromFizzim import importFizzim
-from SystemModel import SystemModel
-from CreateMooreStateMachine import CreateMooreStateMachine
-from TestWriter import TestWriter
+from MBT.ImportFromFizzim import importFizzim
+from MBT.CreateMooreStateMachine import CreateMooreStateMachine
+from MBT.SystemModel import SystemModel
+from MBT.TestWriter import TestWriter
 # ==============================================================================
 # MTB Class
 # ==============================================================================
@@ -19,8 +19,8 @@ class MBT:
 # ====================================
 # Init
 # ====================================
-    def __init__(self, path):
-        self.path=path
+    def __init__(self):
+        self.path=os.getcwd()
 # ====================================
 # Public Functions
 # ====================================
@@ -29,9 +29,10 @@ class MBT:
         self.path=os.path.join(self.path,name)
 # ====================================
     def edit(self):
-        os.system('%s %s'%(os.path.join('Editor','StateMachineEditor.jar'),os.path.join(self.path,self.FizzimFile())))
+        DATA_PATH = pkg_resources.resource_filename('MBT', 'Editor/')
+        os.system('%s %s'%(os.path.join(DATA_PATH,'StateMachineEditor.jar'),os.path.join(self.path,self.FizzimFile())))
 # ====================================
-    def imports(self):
+    def import(self):
         importFizzim(self.SpecFile(),
                      self.InputOutputsFile(),
                      self.FizzimFile(),
@@ -60,7 +61,8 @@ class MBT:
         # CreateModelInformationSection()
         Tester.createRegressionTest(ChangesOnly,30,0)
 # ====================================
-    def Model():        pass
+    def show(self):pass
+# ====================================
     def ExploredModel():pass
 
 # ====================================
@@ -70,7 +72,8 @@ class MBT:
         if os.path.isdir(os.path.join(self.path,name)):
             print('failed to create new, folder name already exists')
         else:
-            shutil.copytree('newProject', os.path.join(self.path,name))
+            DATA_PATH = pkg_resources.resource_filename('MBT', 'newProject/')
+            shutil.copytree(DATA_PATH, os.path.join(self.path,name))
 # ====================================
     def fileWith(self,keyword):
         fName=''
@@ -102,10 +105,11 @@ def main():
     path = "C:\\Users\\esund\\Documents\\Sandbox"
     name = 'oak'
     oak = MBT(os.path.join(path,name))
-    # oak.edit()
+    oak.edit()
     # oak.imports()
     # oak.exploreModel(['AC', 'ACDrop', 'clearFaults', 'ClearUVPbit', 'ClearUVPbitPagePlus00', 'ClearUVPbitPagePlus01', 'MaskUVPbitPage00', 'MaskUVPbitPage01', 'Operation', 'page', 'PSON'],['OUT',])
-    oak.createTests()
+    # oak.createTests()
+    # oak.show()
 
 if __name__ == '__main__':
     main()

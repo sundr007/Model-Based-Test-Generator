@@ -27,5 +27,9 @@ setuptools.setup(
     'numpy',
     'networkx',
 
-    ]
+    ],
+    include_package_data=True,
+    package_data={  '':['newProject/*'],
+                    '':['Editor/*'],
+                    },
 )
