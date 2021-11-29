@@ -6,6 +6,8 @@ from numpy.random import rand
 import networkx as nx
 from MBT.ChinesePostMan import CPP
 
+# from ChinesePostMan import CPP
+
 def VariationsAlongPath(actions,actionvalues):
  allactions			= list()
  allactionvalues	= list()
@@ -250,7 +252,8 @@ class TestWriter:
       self.InitProcedure(test) # see if this step can be eliminated???????
       StateResults = self.FinishProcedure(actions,actionvalues,measurements,setups,Procedure,testType,TestTransistions,ChangesOnly,pushbutton)
 # Copy the model used to the test.  Used for generating diagrams and as a copy of what was used.
-      shutil.copy2('ModelFSMTest.py', os.path.join(self.currentTestFilePath,'ModelFSMCopy.py'))
+      shutil.copy2(os.path.join(self.testFilePath,'ModelFSMTest.py'), os.path.join(self.currentTestFilePath,'ModelFSMCopy.py'))
+      return (len(actions))
 
     def createTests(self):
      self.CreateDataAndReportFolders()
@@ -278,7 +281,7 @@ class TestWriter:
 # Test Spec
      self.CreateTestSpec(StateResults)
      if testType == 'step':
-      shutil.copy2('ModelFSMTest.py', os.path.join(self.currentTestFilePath,'ModelFSMCopy.py'))
+      shutil.copy2(os.path.join(self.testFilePath,'ModelFSMTest.py'), os.path.join(self.currentTestFilePath,'ModelFSMCopy.py'))
       # test[2] = list([x.split('-')[0] for x in test[2]])
       # self.TestFSM.printToFile(0,self.Transitions(test))
       # sleep(0.2)

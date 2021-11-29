@@ -11,14 +11,14 @@ def Clear(arg=''):
  defaultValue   = 0
  return (inputChange,outputChange,defaultValue)
 
-  
+
 # ========================================
 # output functions
-# These are outputs that dependent upon other outputs or inputs.  
+# These are outputs that dependent upon other outputs or inputs.
 # ========================================
 
 def notOUT(OUT):
- return 0 if OUT[1] else 1
+ return 0 if OUT[0] else 1
 
 
 class localDoutputs:
@@ -26,17 +26,17 @@ class localDoutputs:
         pass
 
 # ========================================
-# function dictionary 
+# function dictionary
 # ========================================
 
     inputs =\
     {
-        'PSKILL':(Clear,('',),((1,0),1)),
+        'Clear':(Clear,('',),((1,0),1)),
     }
-
+# ensure that a comma is at the end of a single entry list below.
     outputs =\
     {
-        'notOUT':(notOUT,('OUT')),
+        'notOUT':(notOUT,('OUT',)),
     }
 
 
@@ -71,6 +71,4 @@ class localDoutputs:
             else:
                 args.append(0)
         args = tuple(args)
-        return self.outputs[output][0](*args)
-
-
+        return self.outputs[output][0](args)

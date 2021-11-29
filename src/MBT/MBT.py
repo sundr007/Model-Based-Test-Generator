@@ -2,25 +2,29 @@ import os,shutil,pkg_resources
 from collections import OrderedDict
 
 import importlib.util as IMPORTER
+import MBT.Dot as Dot
 
 from MBT.ImportFromFizzim import importFizzim
 from MBT.CreateMooreStateMachine import CreateMooreStateMachine
 from MBT.SystemModel import SystemModel
 from MBT.TestWriter import TestWriter
+
+# from ImportFromFizzim import importFizzim
+# from CreateMooreStateMachine import CreateMooreStateMachine
+# from SystemModel import SystemModel
+# from TestWriter import TestWriter
 # ==============================================================================
 # MTB Class
 # ==============================================================================
 class MBT:
 # ====================================
-# Static Methods
-# ====================================
-
-
-# ====================================
 # Init
 # ====================================
-    def __init__(self):
-        self.path=os.getcwd()
+    def __init__(self,path=""):
+        if path=="":
+            self.path=os.getcwd()
+        else:
+            self.path=path
 # ====================================
 # Public Functions
 # ====================================
@@ -32,38 +36,65 @@ class MBT:
         DATA_PATH = pkg_resources.resource_filename('MBT', 'Editor/')
         os.system('%s %s'%(os.path.join(DATA_PATH,'StateMachineEditor.jar'),os.path.join(self.path,self.FizzimFile())))
 # ====================================
-    def import(self):
-        importFizzim(self.SpecFile(),
+    def load(self):
+        return importFizzim(self.SpecFile(),
                      self.InputOutputsFile(),
                      self.FizzimFile(),
-                     self.path
-                    )
+                     self.path)
 # ====================================
-    def exploreModel(self,actionsToUse,outputsToUse):
-        ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,"DefaultValues.py")) #(module name, path)
+    def exploreModel(self,actionsToUse=[],outputsToUse=[]):
+        ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,self.DefaultValuesFile())) #(module name, path)
         DefaultValues = IMPORTER.module_from_spec(ioSpec)
         ioSpec.loader.exec_module(DefaultValues)
 
-        UserFSM = SystemModel(self.path,"ModelFSM.py",True,DefaultValues,self.SpecFile())
+        UserFSM = SystemModel(self.path,"ModelFSM.py",True,DefaultValues)
         TestFSM = CreateMooreStateMachine(UserFSM)
-        TestFSM.Explore(actionsToUse,outputsToUse)
+        (States,Transistions) = TestFSM.Explore(actionsToUse,outputsToUse)
         TestFSM.printToFile(self.path,outputsToUse)
+        return (States,Transistions)
 # ====================================
     def createTests(self):
-        ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,"DefaultValues.py")) #(module name, path)
+        ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,self.DefaultValuesFile())) #(module name, path)
         DefaultValues = IMPORTER.module_from_spec(ioSpec)
         ioSpec.loader.exec_module(DefaultValues)
 
-        UserFSM 	= SystemModel(self.path,"ModelFSM.py",True,DefaultValues,self.SpecFile())
-        TestFSM	    = SystemModel(self.path,"ModelFSMTest.py",False,DefaultValues,self.SpecFile())
+        UserFSM 	= SystemModel(self.path,"ModelFSM.py",True,DefaultValues)
+        TestFSM	    = SystemModel(self.path,"ModelFSMTest.py",False,DefaultValues)
         Tester		= TestWriter(UserFSM,self.path,TestFSM)
         ChangesOnly=0
         # CreateModelInformationSection()
-        Tester.createRegressionTest(ChangesOnly,30,0)
+        return Tester.createRegressionTest(ChangesOnly,30,0)
 # ====================================
-    def show(self):pass
+    def show(self):
+        ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,self.DefaultValuesFile())) #(module name, path)
+        DefaultValues = IMPORTER.module_from_spec(ioSpec)
+        ioSpec.loader.exec_module(DefaultValues)
+
+        UserFSM 	= SystemModel(self.path,"ModelFSM.py",True,DefaultValues)
+        fsm = UserFSM.printToFile(numbered=0,highlightedTransitions=[],red=[],green=[])
+        UserFSM.CreateFSMGraph(fsm)
+        shutil.copyfile('Frame.pdf',os.path.join(self.path,'plot.pdf'))
 # ====================================
-    def ExploredModel():pass
+    def showE(self):
+        ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,self.DefaultValuesFile())) #(module name, path)
+        DefaultValues = IMPORTER.module_from_spec(ioSpec)
+        ioSpec.loader.exec_module(DefaultValues)
+
+        UserFSM 	= SystemModel(self.path,"ModelFSMTest.py",True,DefaultValues)
+        fsm = UserFSM.printToFile(numbered=0,highlightedTransitions=[],red=[1,4,5],green=[2,3,6])
+        UserFSM.CreateFSMGraph(fsm)
+        shutil.copyfile('Frame.pdf',os.path.join(self.path,'ExploredModel.pdf'))
+# ====================================
+    def AnimateExploration(self):
+        ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,self.DefaultValuesFile())) #(module name, path)
+        DefaultValues = IMPORTER.module_from_spec(ioSpec)
+        ioSpec.loader.exec_module(DefaultValues)
+
+        UserFSM 	= SystemModel(self.path,"ModelFSMTest.py",False,DefaultValues)
+        fsm = UserFSM.printToFile(numbered=0,highlightedTransitions=[],red=[],green=[])
+        Dot.dotfilesForAnimation('ExploredModel.dot',fsm)
+        # shutil.copyfile('Frame.pdf',os.path.join(self.path,'ExploredModel.pdf'))
+
 
 # ====================================
 # Private Functions
@@ -105,11 +136,14 @@ def main():
     path = "C:\\Users\\esund\\Documents\\Sandbox"
     name = 'oak'
     oak = MBT(os.path.join(path,name))
-    oak.edit()
-    # oak.imports()
-    # oak.exploreModel(['AC', 'ACDrop', 'clearFaults', 'ClearUVPbit', 'ClearUVPbitPagePlus00', 'ClearUVPbitPagePlus01', 'MaskUVPbitPage00', 'MaskUVPbitPage01', 'Operation', 'page', 'PSON'],['OUT',])
-    # oak.createTests()
+    # oak.edit()
+    oak.load()
+    (States,Transistions)=oak.exploreModel(['A', 'B','C'],['OUT',])
+    print(States,Transistions)
+    # print(oak.createTests())
     # oak.show()
+    # oak.showE()
+    oak.AnimateExploration()
 
 if __name__ == '__main__':
     main()

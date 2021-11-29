@@ -16,13 +16,13 @@ class CreateMooreStateMachine:
 # ======================================
 # Error Reporting
 # ======================================
-    def ReportError(self,newline=''):
-     if newline=='':
-      file = open('Temp\\ExploreProgress.txt','w')
-     else:
-      file = open('Temp\\ExploreProgress.txt','a')
-      file.write(newline+'\n')
-     file.close()
+    def ReportError(self,newline=''):pass
+     # if newline=='':
+     #  file = open('Temp\\ExploreProgress.txt','w')
+     # else:
+     #  file = open('Temp\\ExploreProgress.txt','a')
+     #  file.write(newline+'\n')
+     # file.close()
 
     def printToFile(self,path,outputsToUse=[],ExtraOutputs=[]):
      outfile	=open(os.path.join(path,"ModelFSMTest.py"),'w')
@@ -86,6 +86,7 @@ class CreateMooreStateMachine:
      self.ReportError('%s States' % len(states))
      self.ReportError('%s Transitions' % len(graph))
      self.ReportError('Exploration Successful')
+     return (len(states),len(graph))
 
     def InputActionsValues(self,mp):
       actionVals = dict()

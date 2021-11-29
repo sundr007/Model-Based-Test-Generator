@@ -556,3 +556,4 @@ def importFizzim(SpecFilePath,DependantOutputsPath,inputfile,outPath):
     WriteToLabview('%s States'%len(states))
     WriteToLabview('%s Transitions'% len(transitions))
     WriteToLabview('Import Was Successful')
+    return 1

@@ -29,7 +29,7 @@ setuptools.setup(
 
     ],
     include_package_data=True,
-    package_data={  '':['newProject/*'],
-                    '':['Editor/*'],
+    package_data={
+                    '':['Editor/*','newProject/*'],
                     },
 )

@@ -14,10 +14,10 @@ if len(sys.argv) > 1:
     filepath = str(sys.argv[2])+'\\'
     scriptFilePath = str(sys.argv[3])+'\\'
 else:
-    # action = 'Import'
+    action = 'Import'
     # action = 'Explore'
     # action = 'ShowExploredModel'
-    action = 'CreateAllTests'
+    # action = 'CreateAllTests'
     filepath = os.path.join(os.path.expanduser('~'), 'Documents', 'Sandbox', 'MBT', 'simple-MBT','') #"/Documents/Sandbox/MBT-Paths/simple-MBT/"
     scriptFilePath = os.path.join(os.path.expanduser('~'), 'github', 'ModelBasedTester-AllPaths','CurrentTest','') #'/github/ModelBasedTester-AllPaths'
 

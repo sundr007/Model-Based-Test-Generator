@@ -4,11 +4,73 @@ from csv import reader
 from numpy import cumsum
 from numpy.random import rand
 import networkx as nx
+import MBT.Dot as Dot
 
 from shutil import move
 
 import importlib.util as IMPORTER
 
+# ==============================================================================
+# FSM Class
+# ==============================================================================
+class modelFSM: # this is a variable container.  numbered=0,highlightedTransitions=[],red=[],green=[]
+    def __init__(self,fsm,highlightedTransitions=[],red=[],green=[],runstarts=[0]):
+        self.states = dict()
+        for i,state in enumerate(fsm.states):
+          self.states[i] = {'name':str(state), 'outputs':fsm.stateValues[state],'delay':fsm.stateDelays[i]}
+        self.actions            = fsm.actions
+        self.graph              = fsm.transitions
+        if highlightedTransitions == []:
+          self.graytransitions = []
+        else:
+          self.graytransitions = [','.join(['('+str(fsm.transitionInitState(fsm.transitions[int(x)]))+','+str(fsm.transitionFinalState(fsm.transitions[int(x)]))+')' for x in highlightedTransitions])]
+        if red != []:
+          self.failedtransitions = red
+        else:
+          self.failedtransitions = []
+        if green != []:
+          self.passtransitions = green
+        else:
+          self.passtransitions = []
+        self.runstarts          = runstarts
+        if hasattr(fsm, 'EventTracker'):
+            self.EventTracker = fsm.EventTracker
+    def printToFile(self,numbered=0):
+    # Numbered option=1 changes the delay numbers in diagram to transition number
+    # Helps with writing tests.
+         outfile	=open("HighLevelModel.py",'w')
+         outfile.write('# Actions\n')
+         for action in self.actions:
+          outfile.write('def '+action+'(): pass\n')
+         outfile.write('\n# States\n')
+         outfile.write('states = {\n')
+         for state in self.states:
+          outfile.write(str(state)+":"+str(self.states[state])+',\n')
+         outfile.write('}\n\n')
+         outfile.write('initial = 0\n')
+         outfile.write('accepting = []\n')
+         outfile.write('unsafe = []\n')
+         outfile.write('frontier = []\n')
+         outfile.write('finished = []\n')
+         outfile.write('graytransitions = (\n')
+         for graytransition in self.graytransitions:
+          outfile.write(str(graytransition)+',\n')
+         outfile.write(")\n")
+         outfile.write('failedtransitions = (\n')
+         for failedtransition in self.failedtransitions:
+          outfile.write(str(failedtransition)+',\n')
+         outfile.write(")\n")
+         outfile.write('passtransitions = (\n')
+         for passtransition in self.passtransitions:
+          outfile.write(str(passtransition)+',\n')
+         outfile.write(")\n")
+         outfile.write('runstarts = [0]\n\n')
+         outfile.write('# State Transitions\n')
+         outfile.write('graph = (\n')
+         for graph in self.graph:
+          outfile.write(str(graph)+',\n')
+         outfile.write(")")
+         outfile.close()
 # ==============================================================================
 # FSM Class
 # ==============================================================================
@@ -102,6 +164,8 @@ class SystemModel:
           # action 	= self.transitionActions(transition)[0]
           # actionval = sum(actionval)/2 if len(actionval)==2 else actionval[0]
           # self.DefaultActions[action]=actionval
+        if hasattr(ModelFSM, 'EventTracker'):
+            self.EventTracker = ModelFSM.EventTracker
         self.InitOutputsValues()
         for i,action in enumerate(self.Allactions):
          print('action %s: %s' %(i,action))
@@ -111,57 +175,63 @@ class SystemModel:
 # ======================================
 # Error Reporting
 # ======================================
-    def ReportError(self,newline=''):
-     if newline=='':
-      file = open(os.path.join('Temp','ExploreProgress.txt'),'w')
-     else:
-      file = open(os.path.join('Temp','ExploreProgress.txt'),'a')
-      file.write(newline+'\n')
-     file.close()
+    def ReportError(self,newline=''):pass
+     # if newline=='':
+     #  file = open(os.path.join('Temp','ExploreProgress.txt'),'w')
+     # else:
+     #  file = open(os.path.join('Temp','ExploreProgress.txt'),'a')
+     #  file.write(newline+'\n')
+     # file.close()
 # ======================================
 
     def printToFile(self,numbered=0,highlightedTransitions=[],red=[],green=[]):
+        fsm = modelFSM(self,highlightedTransitions,red,green)
+        fsm.printToFile()
+        return fsm
 # Numbered option=1 changes the delay numbers in diagram to transition number
 # Helps with writing tests.
-     outfile	=open("HighLevelModel.py",'w')
-     outfile.write('# Actions\n')
-     for action in self.actions:
-      outfile.write('def '+action+'(): pass\n')
-     outfile.write('\n# States\n')
-     outfile.write('states = {\n')
-     for i,state in enumerate(self.states):
-      outfile.write(' '+str(i)+" : {'name':'"+str(state)+"' , 'outputs':"+str(self.stateValues[state])+",'delay':"+str(self.stateDelays[i])+'},\n')
-     outfile.write('}\n\n')
-     outfile.write('initial = 0\n')
-     outfile.write('accepting = []\n')
-     outfile.write('unsafe = []\n')
-     outfile.write('frontier = []\n')
-     outfile.write('finished = []\n')
-     if highlightedTransitions == []:
-      outfile.write('deadend = []\n')
-     else:
-      outfile.write('graytransitions = ['+','.join(['('+str(self.transitionInitState(self.transitions[int(x)]))+','+str(self.transitionFinalState(self.transitions[int(x)]))+')' for x in highlightedTransitions])+']\n')
-     if red != []:
-      outfile.write('failedtransitions = ['+','.join([str(x) for x in red])+']\n')
-     else:
-      outfile.write('failedtransitions = []\n')
-     if green != []:
-      outfile.write('passtransitions = ['+','.join([str(x) for x in green])+']\n')
-     else:
-      outfile.write('passtransitions = []\n')
-     outfile.write('runstarts = [0]\n\n')
-     outfile.write('# State Transitions\n')
-     outfile.write('graph = (\n')
-     for graph in self.transitions:
-      outfile.write(str(graph)+',\n')
-     outfile.write(")")
-     outfile.close()
+     # outfile	=open("HighLevelModel.py",'w')
+     # outfile.write('# Actions\n')
+     # for action in self.actions:
+     #  outfile.write('def '+action+'(): pass\n')
+     # outfile.write('\n# States\n')
+     # outfile.write('states = {\n')
+     # for i,state in enumerate(self.states):
+     #  outfile.write(' '+str(i)+" : {'name':'"+str(state)+"' , 'outputs':"+str(self.stateValues[state])+",'delay':"+str(self.stateDelays[i])+'},\n')
+     # outfile.write('}\n\n')
+     # outfile.write('initial = 0\n')
+     # outfile.write('accepting = []\n')
+     # outfile.write('unsafe = []\n')
+     # outfile.write('frontier = []\n')
+     # outfile.write('finished = []\n')
+     # if highlightedTransitions == []:
+     #  outfile.write('deadend = []\n')
+     # else:
+     #  outfile.write('graytransitions = ['+','.join(['('+str(self.transitionInitState(self.transitions[int(x)]))+','+str(self.transitionFinalState(self.transitions[int(x)]))+')' for x in highlightedTransitions])+']\n')
+     # if red != []:
+     #  outfile.write('failedtransitions = ['+','.join([str(x) for x in red])+']\n')
+     # else:
+     #  outfile.write('failedtransitions = []\n')
+     # if green != []:
+     #  outfile.write('passtransitions = ['+','.join([str(x) for x in green])+']\n')
+     # else:
+     #  outfile.write('passtransitions = []\n')
+     # outfile.write('runstarts = [0]\n\n')
+     # outfile.write('# State Transitions\n')
+     # outfile.write('graph = (\n')
+     # for graph in self.transitions:
+     #  outfile.write(str(graph)+',\n')
+     # outfile.write(")")
+     # outfile.close()
+     # fsm = modelFSM(self,self.states,self.transitions,graytransitions,failedtransitions,passtransitions)
+     # return fsm
 
-    def CreateFSMGraph(self,outname=['HighLevelModel',],inname='HighLevelModel'):
+    def CreateFSMGraph(self,fsm,outname=['HighLevelModel',],inname='HighLevelModel'):
      # os.system('move %s.dot CurrentTest\\%s.dot' % (inname,outname[0]))
-     sleep(.1)
-     move('%s.dot'%inname,os.path.join('CurrentTest','%s.dot'%outname[0]))
-     sleep(.1)
+     Dot.dotfile('BehavioralModel.dot',fsm)
+     # sleep(.1)
+     # move('%s.dot'%inname,os.path.join('CurrentTest','%s.dot'%outname[0]))
+     # sleep(.1)
      # if inname == 'ExploredModel' and len(self.transitions)>150:
      #  os.system('cd CurrentTest & sfdp -T pdf  -Gsize="7.5,7.5" -o %s.pdf %s.dot & cd ..' % (outname[0],outname[0]))
      # else:
