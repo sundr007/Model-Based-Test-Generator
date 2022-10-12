@@ -1,0 +1,40 @@
+digraph BehavioralModel {
+K=2;
+overlap=scale;
+
+  // Nodes
+  OFF [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<OFF<BR/> <FONT POINT-SIZE="10">OUT:0</FONT>>]
+  ON [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<ON<BR/> <FONT POINT-SIZE="10">OUT:1</FONT>>]
+  OffA [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<OffA<BR/> <FONT POINT-SIZE="10">OUT:0</FONT>>]
+  3 [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<3<BR/> <FONT POINT-SIZE="10">OUT:0</FONT>>]
+  4 [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<4<BR/> <FONT POINT-SIZE="10">OUT:0</FONT>>]
+  5 [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<5<BR/> <FONT POINT-SIZE="10">OUT:0</FONT>>]
+  6 [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<6<BR/> <FONT POINT-SIZE="10">OUT:0</FONT>>]
+  7 [ style=filled, shape=ellipse,penwidth = 1, peripheries=1, fillcolor=white, color=black, fontcolor=black , label=<7<BR/> <FONT POINT-SIZE="10">OUT:0</FONT>>]
+
+  // Transitions
+  OFF -> ON [ penwidth = 1,label=<A(1), delay:4.0 Sec>, color=black, fontcolor=black ]
+  ON -> OffA [ penwidth = 1,label=<C(0), delay:0.4 Sec>, color=black, fontcolor=black ]
+  OffA -> 3 [ penwidth = 1,label=<A(0), delay:1.0 Sec>, color=black, fontcolor=black ]
+  3 -> OffA [ penwidth = 1,label=<A(1), delay:4.0 Sec>, color=black, fontcolor=black ]
+  3 -> 4 [ penwidth = 1,label=<B(1), delay:0 Sec>, color=black, fontcolor=black ]
+  4 -> 5 [ penwidth = 1,label=<A(1), delay:4.0 Sec>, color=black, fontcolor=black ]
+  5 -> 4 [ penwidth = 1,label=<A(0), delay:1.0 Sec>, color=black, fontcolor=black ]
+  5 -> OffA [ penwidth = 1,label=<B(0), delay:0 Sec>, color=black, fontcolor=black ]
+  5 -> 6 [ penwidth = 1,label=<C(1), delay:0 Sec>, color=black, fontcolor=black ]
+  6 -> 5 [ penwidth = 1,label=<C(0), delay:0 Sec>, color=black, fontcolor=black ]
+  6 -> 7 [ penwidth = 1,label=<A(0), delay:1.0 Sec>, color=black, fontcolor=black ]
+  7 -> 6 [ penwidth = 1,label=<A(1), delay:4.0 Sec>, color=black, fontcolor=black ]
+  7 -> 4 [ penwidth = 1,label=<C(0), delay:0 Sec>, color=black, fontcolor=black ]
+  7 -> OFF [ penwidth = 1,label=<B(0), delay:0.6 Sec>, color=black, fontcolor=black ]
+  6 -> ON [ penwidth = 1,label=<B(0), delay:0.6 Sec>, color=black, fontcolor=black ]
+  4 -> 3 [ penwidth = 1,label=<B(0), delay:0 Sec>, color=black, fontcolor=black ]
+  4 -> 7 [ penwidth = 1,label=<C(1), delay:0 Sec>, color=black, fontcolor=black ]
+  3 -> OFF [ penwidth = 1,label=<C(1), delay:0.6 Sec>, color=black, fontcolor=black ]
+  OffA -> 5 [ penwidth = 1,label=<B(1), delay:0 Sec>, color=black, fontcolor=black ]
+  OffA -> ON [ penwidth = 1,label=<C(1), delay:0.6 Sec>, color=black, fontcolor=black ]
+  ON -> OFF [ penwidth = 1,label=<A(0), delay:1.0 Sec>, color=black, fontcolor=black ]
+  ON -> 6 [ penwidth = 1,label=<B(1), delay:0.4 Sec>, color=black, fontcolor=black ]
+  OFF -> 3 [ penwidth = 1,label=<C(0), delay:0.4 Sec>, color=black, fontcolor=black ]
+  OFF -> 7 [ penwidth = 1,label=<B(1), delay:0.4 Sec>, color=black, fontcolor=black ]
+}

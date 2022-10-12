@@ -5,7 +5,7 @@ from numpy import cumsum
 from numpy.random import rand
 import networkx as nx
 import MBT.Dot as Dot
-
+# import Dot as Dot
 from shutil import move
 
 import importlib.util as IMPORTER

@@ -1,5 +1,7 @@
 import os,shutil,pkg_resources
 from collections import OrderedDict
+from time import sleep
+
 
 import importlib.util as IMPORTER
 import MBT.Dot as Dot
@@ -8,6 +10,13 @@ from MBT.ImportFromFizzim import importFizzim
 from MBT.CreateMooreStateMachine import CreateMooreStateMachine
 from MBT.SystemModel import SystemModel
 from MBT.TestWriter import TestWriter
+
+# import Dot as Dot
+#
+# from ImportFromFizzim import importFizzim
+# from CreateMooreStateMachine import CreateMooreStateMachine
+# from SystemModel import SystemModel
+# from TestWriter import TestWriter
 
 # from ImportFromFizzim import importFizzim
 # from CreateMooreStateMachine import CreateMooreStateMachine
@@ -31,6 +40,13 @@ class MBT:
     def new(self,name):
         self.copyNewProject2folder(name)
         self.path=os.path.join(self.path,name)
+# ====================================
+    def open(self,name):
+        path = os.path.join(self.path,name)
+        if os.path.isdir(path):
+            self.path=path
+        else:
+            print('%s is not a directory'%path)
 # ====================================
     def edit(self):
         DATA_PATH = pkg_resources.resource_filename('MBT', 'Editor/')
@@ -73,7 +89,8 @@ class MBT:
         UserFSM 	= SystemModel(self.path,"ModelFSM.py",True,DefaultValues)
         fsm = UserFSM.printToFile(numbered=0,highlightedTransitions=[],red=[],green=[])
         UserFSM.CreateFSMGraph(fsm)
-        shutil.copyfile('Frame.pdf',os.path.join(self.path,'plot.pdf'))
+        sleep(0.5)
+        shutil.copyfile('Frame.pdf',os.path.join(self.path,'InputModel.pdf'))
 # ====================================
     def showE(self):
         ioSpec = IMPORTER.spec_from_file_location("DefaultValues.py", os.path.join(self.path,self.DefaultValuesFile())) #(module name, path)
@@ -81,8 +98,9 @@ class MBT:
         ioSpec.loader.exec_module(DefaultValues)
 
         UserFSM 	= SystemModel(self.path,"ModelFSMTest.py",True,DefaultValues)
-        fsm = UserFSM.printToFile(numbered=0,highlightedTransitions=[],red=[1,4,5],green=[2,3,6])
+        fsm = UserFSM.printToFile(numbered=0,highlightedTransitions=[],red=[],green=[])
         UserFSM.CreateFSMGraph(fsm)
+        sleep(0.5)
         shutil.copyfile('Frame.pdf',os.path.join(self.path,'ExploredModel.pdf'))
 # ====================================
     def AnimateExploration(self):
@@ -92,7 +110,8 @@ class MBT:
 
         UserFSM 	= SystemModel(self.path,"ModelFSMTest.py",False,DefaultValues)
         fsm = UserFSM.printToFile(numbered=0,highlightedTransitions=[],red=[],green=[])
-        Dot.dotfilesForAnimation('ExploredModel.dot',fsm)
+        Dot.dotfilesForAnimation('ExploredModel.dot',fsm,self.path)
+
         # shutil.copyfile('Frame.pdf',os.path.join(self.path,'ExploredModel.pdf'))
 
 
@@ -133,16 +152,19 @@ class MBT:
 # ====================================
 
 def main():
-    path = "C:\\Users\\esund\\Documents\\Sandbox"
+    path = "/home/sundry/Documents/MBT/"
     name = 'oak'
-    oak = MBT(os.path.join(path,name))
+    # oak = MBT(os.path.join(path,name))
+    oak = MBT(path)
+    oak.open(name)
+    # oak.new(name)
     # oak.edit()
     oak.load()
     (States,Transistions)=oak.exploreModel(['A', 'B','C'],['OUT',])
     print(States,Transistions)
-    # print(oak.createTests())
-    # oak.show()
-    # oak.showE()
+    print(oak.createTests())
+    oak.show()
+    oak.showE()
     oak.AnimateExploration()
 
 if __name__ == '__main__':

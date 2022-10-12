@@ -4,6 +4,7 @@ Dot - generate graphics in dot language
 
 import os.path
 from time import sleep
+from PyPDF2 import PdfMerger
 
 def state(n, fsm,BlackStates=0):
  if BlackStates==0 or n in BlackStates:
@@ -84,9 +85,14 @@ def dotfile(fname, fsm):
         os.system('dot -T pdf -o %s.pdf %s & cd ..' % ('%s'%('Frame'),fname))
     print('Dot or sfdp run')
 
-def dotfilesForAnimation(fname, fsm):
-    workingDir = os.getcwd()
-    os.chdir(os.path.join(workingDir,'animation'))
+def dotfilesForAnimation(fname, fsm,path):
+    workingDir = path
+    animationPath = os.path.join(workingDir,'animation')
+    if not os.path.isdir(animationPath):
+        os.makedirs(animationPath)
+    os.chdir(animationPath)
+    merger = PdfMerger()
+    files2delete=[]
     for i in range(len(fsm.EventTracker)):
         BlackStates      = []
         BlackTransitions = []
@@ -112,6 +118,12 @@ def dotfilesForAnimation(fname, fsm):
             os.system('sfdp -T pdf  -o %s.pdf %s & cd ..' % ('%s%s'%('Frame',i),fname))
         else:
             os.system('dot -T pdf -o %s.pdf %s & cd ..' % ('%s%s'%('Frame',i),fname))
-    # os.system('magick mogrify -format png -quality 100 -resize 1080x1080 *.pdf')
-    # os.system('ffmpeg -r 2 -f image2 -s 1920x1080 -i Frame%d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p a.mp4')
+        sleep(0.1)
+        merger.append("%s.pdf"%'%s%s'%('Frame',i))
+        files2delete.append("%s.pdf"%'%s%s'%('Frame',i))
+    sleep(1)
+    merger.write("animation.pdf")
+    merger.close()
+    for file in files2delete:
+        os.remove(file)
     os.chdir(workingDir)
