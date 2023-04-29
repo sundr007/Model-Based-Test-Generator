@@ -1,2 +1,0 @@
-robocopy "C:\Users\esund\github\ModelBasedTester-AllPaths\CurrentTest\Behavioral Model" "C:\Users\esund\Documents\Sandbox\MBT\simple-MBT\report\data\Behavioral Model"
-Behavioral Done

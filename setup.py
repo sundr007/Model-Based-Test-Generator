@@ -8,10 +8,10 @@ setuptools.setup(
     version="0.0.1",
     author="sundr007",
     author_email="esundry@gmail.com",
-    description="A model based Tester",
+    description="A model based Tester generator.  Inputs a model - expands it to all states, and writes tests to verify it.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/sundr007/ModelBasedTester-AllPaths",
+    url="https://github.com/sundr007/Model-Based-Test-Generator",
     project_urls={
         "Bug Tracker": "https://github.com/sundr007/ModelBasedTester-AllPaths/issues",
     },
