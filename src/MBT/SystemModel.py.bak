@@ -452,10 +452,7 @@ class SystemModel:
 
     def ComputeOutputs(self):
      for output in list(self.CurrentStateoutputs()):
-      if self.CurrentStateoutputs()[output] != 'x':
       self.outputValues[output] = self.CurrentStateoutputs()[output]
-       if output in list(self.actionValues):
-          self.actionValues[output] = self.CurrentStateoutputs()[output]
      if self.computedOutputs != []:
       for output in self.computedOutputs:
        outputValue = self.Doutputs.compute(output,self.outputValues,self.actionValues)

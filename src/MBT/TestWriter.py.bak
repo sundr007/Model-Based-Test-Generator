@@ -187,8 +187,6 @@ class TestWriter:
       testedTransitions = sorted(set(testedTransitions))
       TotalNumberOfSteps = TotalNumberOfSteps + len(TransitionList)
       print(j,len(testedTransitions),len(self.TestFSM.transitions),TotalNumberOfSteps)
-      print("%s out of %s transistions tested in %s steps"%(len(testedTransitions),len(self.TestFSM.transitions),TotalNumberOfSteps))
-      print("%s transitions are left"%len(transitions))
 # Setup test parameters
       test = []
       test.append(['Test %s' % str(j+1),])

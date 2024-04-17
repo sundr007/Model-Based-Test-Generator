@@ -26,7 +26,6 @@ setuptools.setup(
     install_requires=[
     'numpy',
     'networkx',
-    'PyPDF2',
 
     ],
     include_package_data=True,
