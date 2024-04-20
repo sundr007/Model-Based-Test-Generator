@@ -56,6 +56,7 @@ The state machine model can exported to pdf using
 # View and edit the state machine model of the system.  graphviz must be installed for this work because the program uses dot from graphviz.
 MBT.show()
 ```
+xfun::embed_file("InputModel.pdf")
 Next the model can be converted to a Moore state machine.
 ```python
 # Convert model to a Moore state machine
