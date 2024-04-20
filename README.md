@@ -56,7 +56,7 @@ The state machine model can exported to pdf using
 # View and edit the state machine model of the system.  graphviz must be installed for this work because the program uses dot from graphviz.
 MBT.show()
 ```
-xfun::embed_file("InputModel.pdf")
+![A state machine of the input model.](InputModel.png)
 Next the model can be converted to a Moore state machine.
 ```python
 # Convert model to a Moore state machine
@@ -67,6 +67,8 @@ The large Moore model can exported to pdf using
 # Convert model to a Moore state machine
 MBT.showE()
 ```
+The Moore state machine is much more complex looking than the input model because the input model is condensed modeling that incudes things like Mealy state machine, and inputoutput file that adds extra functionality to the model.
+![A state machine of the input model.](ExploredModel.png)
 
 Finally, a test can be written from the explored model that will test every state transition.
 ```python
