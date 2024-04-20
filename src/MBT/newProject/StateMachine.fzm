@@ -1,4 +1,4 @@
-## File last modified by Fizzim: 4:16:02 PM on 2/27/19
+## File last modified by Fizzim: 9:19:30 PM on 4/8/24
 <version>
    14.02.26
 </version>
@@ -927,14 +927,14 @@ true
 20
 </TableSpace>
 <TableFont>
-Arial
+Dialog.plain
 11
 </TableFont>
 <TableColor>
 -16777216
 </TableColor>
 <Font>
-Arial
+Dialog.plain
 11
 </Font>
 <Grid>
@@ -1725,16 +1725,16 @@ fzm_globalTable
       </delay>
    </attributes>
    <x0>
-   474
+   482
    </x0>
    <y0>
-   502
+   479
    </y0>
    <x1>
-   604
+   612
    </x1>
    <y1>
-   632
+   609
    </y1>
    <reset>
    false
@@ -1932,10 +1932,10 @@ fzm_globalTable
    531.0
    </startPtY>
    <endPtX>
-   477.0
+   485.0
    </endPtX>
    <endPtY>
-   544.0
+   521.0
    </endPtY>
    <startCtrlPtX>
    360.0
@@ -1944,10 +1944,10 @@ fzm_globalTable
    501.0
    </startCtrlPtY>
    <endCtrlPtY>
-   420.0
+   428.0
    </endCtrlPtY>
    <endCtrlPtY>
-   496.0
+   473.0
    </endCtrlPtY>
    <startStateIndex>
    32
@@ -2169,10 +2169,10 @@ fzm_globalTable
    ON
    </endState>
    <startPtX>
-   477.0
+   485.0
    </startPtX>
    <startPtY>
-   589.0
+   566.0
    </startPtY>
    <endPtX>
    317.0
@@ -2181,10 +2181,10 @@ fzm_globalTable
    561.0
    </endPtY>
    <startCtrlPtX>
-   425.0
+   433.0
    </startCtrlPtX>
    <startCtrlPtY>
-   592.0
+   569.0
    </startCtrlPtY>
    <endCtrlPtY>
    359.0
@@ -2418,10 +2418,10 @@ fzm_globalTable
    292.0
    </startPtY>
    <endPtX>
-   539.0
+   547.0
    </endPtX>
    <endPtY>
-   502.0
+   479.0
    </endPtY>
    <startCtrlPtX>
    544.0
@@ -2430,10 +2430,10 @@ fzm_globalTable
    351.0
    </startCtrlPtY>
    <endCtrlPtY>
-   539.0
+   547.0
    </endCtrlPtY>
    <endCtrlPtY>
-   440.0
+   417.0
    </endCtrlPtY>
    <startStateIndex>
    8
@@ -2655,10 +2655,10 @@ fzm_globalTable
    OFF
    </endState>
    <startPtX>
-   497.0
+   505.0
    </startPtX>
    <startPtY>
-   517.0
+   494.0
    </startPtY>
    <endPtX>
    521.0
@@ -2667,10 +2667,10 @@ fzm_globalTable
    292.0
    </endPtY>
    <startCtrlPtX>
-   515.0
+   523.0
    </startCtrlPtX>
    <startCtrlPtY>
-   444.0
+   421.0
    </startCtrlPtY>
    <endCtrlPtY>
    520.0
@@ -3870,10 +3870,10 @@ fzm_globalTable
    OFF
    </endState>
    <startPtX>
-   516.0
+   524.0
    </startPtX>
    <startPtY>
-   505.0
+   482.0
    </startPtY>
    <endPtX>
    521.0
@@ -3882,10 +3882,10 @@ fzm_globalTable
    292.0
    </endPtY>
    <startCtrlPtX>
-   515.0
+   523.0
    </startCtrlPtX>
    <startCtrlPtY>
-   444.0
+   421.0
    </startCtrlPtY>
    <endCtrlPtY>
    520.0

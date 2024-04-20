@@ -6,8 +6,8 @@
 # These are often used for setting bits that would make the base state machine too large.
 # ========================================
 def Clear(arg=''):
- outputChange   ={'OUT':0,}
- inputChange	={'A':arg,'B':arg,}
+ outputChange   ={}
+ inputChange	={'Clear':arg}
  defaultValue   = 0
  return (inputChange,outputChange,defaultValue)
 
@@ -17,8 +17,8 @@ def Clear(arg=''):
 # These are outputs that dependent upon other outputs or inputs.
 # ========================================
 
-def notOUT(OUT):
- return 0 if OUT[0] else 1
+def otherOutput(args):
+ return 0 if args[0] and not args[1] else 1
 
 
 class localDoutputs:
@@ -36,7 +36,7 @@ class localDoutputs:
 # ensure that a comma is at the end of a single entry list below.
     outputs =\
     {
-        'notOUT':(notOUT,('OUT',)),
+        'otherOutput':(otherOutput,('OUT','Clear')),
     }
 
 
