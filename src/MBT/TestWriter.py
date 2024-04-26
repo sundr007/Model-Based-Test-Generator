@@ -159,7 +159,7 @@ class TestWriter:
       transitions = list(solution)
       for x in transitions:
        print (x)
-
+     print("%s transitions found in Chinese Post Man"%len(transitions))
 # Break the large test procedure into individual tests of length "TestLength"
      while(len(testedTransitions) < len(self.TestFSM.transitions)):
       # Get to start state
@@ -255,7 +255,7 @@ class TestWriter:
       StateResults = self.FinishProcedure(actions,actionvalues,measurements,setups,Procedure,testType,TestTransistions,ChangesOnly,pushbutton)
 # Copy the model used to the test.  Used for generating diagrams and as a copy of what was used.
       shutil.copy2(os.path.join(self.testFilePath,'ModelFSMTest.py'), os.path.join(self.currentTestFilePath,'ModelFSMCopy.py'))
-      return (len(actions))
+     return (len(actions))
 
     def createTests(self):
      self.CreateDataAndReportFolders()
